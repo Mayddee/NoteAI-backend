@@ -45,5 +45,18 @@ public class NoteService {
         }
         return getById(noteId);
     }
-    
+
+    @Transactional
+    public void deleteNote(Long noteId){
+        Note note = getById(noteId);
+        noteRepository.delete(note);
+    }
+
+    @Transactional
+    public Note updateNote(Note note){
+        if(!noteRepository.findById(note.getId()).isPresent()){
+            throw new IllegalArgumentException("Note already exists!");
+        }
+        return noteRepository.save(note);
+    }
 }
