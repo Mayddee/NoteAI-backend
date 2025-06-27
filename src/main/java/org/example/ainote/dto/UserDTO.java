@@ -7,7 +7,10 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.example.ainote.dto.validation.OnCreate;
 import org.example.ainote.dto.validation.OnUpdate;
+import org.example.ainote.entity.Role;
 import org.hibernate.validator.constraints.Length;
+
+import java.util.Set;
 
 @Data
 @Schema(description="User DTO")
@@ -23,6 +26,12 @@ public class UserDTO {
     private String name;
 
 
+    @Schema(description = "Email")
+    @NotNull(message = "Email can not be null", groups = OnCreate.class)
+    @Length(max = 255, message = "Email length can not be smaller than 255 symbols.", groups = {OnCreate.class, OnUpdate.class})
+    private String email;
+
+
     @Schema(description = "Username")
     @NotNull(message = " Username can not be null", groups = {OnCreate.class, OnUpdate.class})
     @Length(max = 255, message = "Username length can not be smaller than 255 symbols.", groups = {OnCreate.class, OnUpdate.class})
@@ -32,5 +41,8 @@ public class UserDTO {
     @NotNull(message = " Password can not be null", groups = {OnCreate.class, OnUpdate.class})
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
+
+//    @Schema(description = "Roles of the user")
+//    private Set<Role> roles;
 
 }

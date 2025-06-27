@@ -28,7 +28,7 @@ public class JwtTokenFilter extends GenericFilterBean {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         String path = request.getRequestURI();
-        if(WHITELIST.contains(path)) {
+        if(WHITELIST.stream().anyMatch(path::startsWith)) {
             filterChain.doFilter(servletRequest, servletResponse);
             return;
         }

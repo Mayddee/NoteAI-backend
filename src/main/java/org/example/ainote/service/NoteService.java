@@ -5,6 +5,7 @@ import org.example.ainote.entity.Note;
 import org.example.ainote.entity.User;
 import org.example.ainote.exception.EntityNotFoundException;
 import org.example.ainote.repository.NoteRepository;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,13 +48,21 @@ public class NoteService {
     }
 
     @Transactional
-    public void deleteNote(Long noteId){
+    public void deleteNote(Long userId, Long noteId){
+        if(!userService.isNoteOwner(noteId, userId)){
+            throw new EntityNotFoundException("You do not have permission to delete this note");
+        }
+        User user = userService.getById(userId);
         Note note = getById(noteId);
+        user.getNotes().remove(note);
+        userService.update(user);
         noteRepository.delete(note);
     }
 
     @Transactional
-    public Note updateNote(Note note){
+    public Note updateNote(Long userId, Note note){
+        if(!userService.isNoteOwner(note.getId(), userId)){
+            throw new EntityNotFoundException("Access denied to update note");        }
         if(!noteRepository.findById(note.getId()).isPresent()){
             throw new IllegalArgumentException("Note already exists!");
         }

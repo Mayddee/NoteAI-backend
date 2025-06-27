@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NonNull;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -32,10 +33,14 @@ public class User {
     private String password;
 
 
+//    @ElementCollection(fetch = FetchType.EAGER)
+//    @CollectionTable(name = "users_roles")
+//    @Enumerated(EnumType.STRING)
+
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "users_roles")
+    @CollectionTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
-    private Set<Role> roles;
+    private Set<Role> roles = new HashSet<>();
 
     @OneToMany(fetch = FetchType.EAGER)
     @JoinTable(inverseJoinColumns = @JoinColumn(name = "note_id"))

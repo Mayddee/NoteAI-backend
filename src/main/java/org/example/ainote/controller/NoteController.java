@@ -31,19 +31,19 @@ public class NoteController {
     }
 
     @GetMapping("/{id}")
-    public NoteDTO getNoteById(@PathVariable Long id) {
-        return noteMapper.toDto(noteService.getById(id));
+    public NoteDTO getNoteById(@AuthenticationPrincipal JwtEntity user, @PathVariable Long id) {
+        return noteMapper.toDto(noteService.getNote(user.getId(), id));
     }
 
     @DeleteMapping("/{id}")
-    public void deleteNoteById(@PathVariable Long id) {
-        noteService.deleteNote(id);
+    public void deleteNoteById(@AuthenticationPrincipal JwtEntity user, @PathVariable Long id) {
+        noteService.deleteNote(user.getId(), id);
     }
 
     @PutMapping
-    public NoteDTO updateNote(@Validated(OnUpdate.class) @RequestBody NoteDTO note) {
+    public NoteDTO updateNote(@AuthenticationPrincipal JwtEntity user, @Validated(OnUpdate.class) @RequestBody NoteDTO note) {
         Note noteEntity = noteMapper.toEntity(note);
-        Note updatedNote = noteService.updateNote(noteEntity);
+        Note updatedNote = noteService.updateNote(user.getId(), noteEntity);
         return noteMapper.toDto(updatedNote);
 
     }

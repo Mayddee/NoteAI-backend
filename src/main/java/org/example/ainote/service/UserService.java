@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.example.ainote.entity.User;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -41,8 +42,9 @@ public class UserService {
             throw new IllegalArgumentException("Username already exists!");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepository.save(user);
-        Set<Role> roles = Set.of(Role.USER);
+//        userRepository.save(user);
+        Set<Role> roles = new HashSet<>();
+        roles.add(Role.USER);
         user.setRoles(roles);
         return userRepository.save(user);
     }
