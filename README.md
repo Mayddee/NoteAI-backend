@@ -103,7 +103,9 @@ spring.jpa.properties.hibernate.format_sql=true
 
 # Gemini API via Spring AI
 spring.ai.googleai.api-key=your_actual_gemini_api_key_here
-spring.ai.googleai.chat.model=gemini-pro
+spring.ai.openai.chat.base-url=https://generativelanguage.googleapis.com
+spring.ai.openai.chat.completions-path=/v1beta/openai/chat/completions
+spring.ai.openai.chat.options.model=gemini-2.0-flash
 
 # JWT for DurityToken auth
 jwt.secret=your_secure_jwt_secret_here
@@ -138,6 +140,10 @@ To build and start the backend server:
 
 ```bash
 mvn clean spring-boot:run
+```
+If you set .env , then
+```bash
+export $(cat .env | xargs) && ./mvnw spring-boot:run
 ```
 
 The app will be running at:
