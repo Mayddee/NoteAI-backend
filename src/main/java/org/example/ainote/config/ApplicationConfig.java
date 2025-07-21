@@ -106,7 +106,8 @@ public class ApplicationConfig{
                                 "/swagger-ui.html",
                                 "/swagger-resources/**",
                                 "/webjars/**",
-                                "/api/v1/auth/**").permitAll() //проверка метода на авторизацию то есть на наличие токена что приходит
+                                "/api/v1/auth/**",
+                                "/models").permitAll() //проверка метода на авторизацию то есть на наличие токена что приходит
                         .anyRequest().authenticated()
                 )
                 .anonymous(anon -> anon.disable())

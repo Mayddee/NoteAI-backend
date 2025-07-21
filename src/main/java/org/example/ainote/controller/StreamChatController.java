@@ -1,19 +1,14 @@
 package org.example.ainote.controller;
 
-import lombok.RequiredArgsConstructor;
 
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.messages.MessageType;
 import org.springframework.ai.chat.model.ChatModel;
-import org.springframework.ai.openai.OpenAiChatModel;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Flux;
+
 
 @RestController
 @RequestMapping("/api/chat")
-//@RequiredArgsConstructor
 public class StreamChatController {
     private final ChatClient chatClient;
 
@@ -26,14 +21,17 @@ public class StreamChatController {
                        @RequestParam(required = false, defaultValue = "en") String lang) {
 
         String formattedPrompt = String.format("""
-            You are a helpful assistant that summarizes user's notes.
-            Here's the note content:
+You are a helpful assistant that writes **short summaries** of user notes.
 
-            %s
+        Here's the note:
 
-            Please summarize this note in **the same language** it's written in.
-            If you can't detect the language, default to %s.
-            Keep it concise, no introductions or conclusions.
+        %s
+
+        Summarize it in **the same language** as the original note.
+        Do **not** translate or paraphrase the content into another language.
+        If the language cannot be reliably detected, default to %s.
+        Keep the summary concise — 1–2 sentences, **no introductions or conclusions**.
+        Only output the summary.
         """, prompt, lang);
 
         return chatClient.prompt()
